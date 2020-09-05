@@ -29,4 +29,5 @@ def main():
             download(model['download_url'], model_location)
 
 if __name__ == "__main__":
+    models_dir.mkdir(parents=True, exist_ok=True)
     main()

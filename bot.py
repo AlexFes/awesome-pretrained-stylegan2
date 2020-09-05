@@ -25,10 +25,10 @@ def generate_images(model_path, dest_path, seed_range):
 
     dnnlib.submit_run(sc, 'run_generator.generate_images', network_pkl=model_path, seeds=range(seed_range), truncation_psi=1.0, dest=dest_path)
 
-for token, model in config.items():
-    bot = telebot.TeleBot(token)
-    model_path = 'models/{}.pkl'.format(model)
-    dest_path = './images/{}'.format(model)
+for config_item in config:
+    bot = telebot.TeleBot(config_item.token)
+    model_path = 'models/{}.pkl'.format(config_item.model)
+    dest_path = './images/{}'.format(config_item.model)
     seed_range = 1000
     Path(dest_path).mkdir(parents=True, exist_ok=True)
 
@@ -42,7 +42,7 @@ for token, model in config.items():
     @bot.message_handler(commands=['start', 'go', 'Помощь'])
     def start_handler(message):
         bot.send_message(chat_id=message.chat.id,
-                         text="Stylegan2 Test",
+                         text="Эта модель генерирует ".format(config_item.help),
                          reply_markup=makeStartKeyboard(),
                          parse_mode='HTML')
 
@@ -52,6 +52,5 @@ for token, model in config.items():
         cur_img = random.choice(images)
 
         bot.send_photo(chat_id=message.chat.id, photo=open(os.path.join(dest_path, cur_img), "rb"))
-
 
     bot.polling()
