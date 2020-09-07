@@ -4,8 +4,8 @@ import shutil
 import tempfile
 import requests
 from pathlib import Path
+from config import config
 
-model_data_file = 'models.json'
 models_dir = Path('models')
 
 def download(url, dest_path):
@@ -22,11 +22,9 @@ def download(url, dest_path):
     shutil.copyfile(downloaded_file, dest_path)
 
 def main():
-    with open(model_data_file) as model_file:
-        reader = json.load(model_file)
-        for model in reader:
-            model_location = models_dir/(model["name"] + ".pkl")
-            download(model['download_url'], model_location)
+    for model in config:
+        model_location = models_dir/(model["model"] + ".pkl")
+        download(model["download_url"], model_location)
 
 if __name__ == "__main__":
     models_dir.mkdir(parents=True, exist_ok=True)
