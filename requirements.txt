@@ -1,4 +1,8 @@
+
 jinja2
 Pillow
 mega.py
 gdown
+pytelegrambotapi
+tensorflow==1.15.3
+numpy
