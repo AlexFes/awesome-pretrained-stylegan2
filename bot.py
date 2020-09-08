@@ -3,6 +3,7 @@ import telebot
 from telebot import types
 import sys
 from pathlib import Path
+from PIL import Image
 import random
 import config
 
@@ -43,12 +44,14 @@ if len(sys.argv) == 2:
         images = sorted(os.listdir(dest_path))
 
         if not call.message.chat.id in users_data:
-            users_data[call.message.chat.id] = 0
+            users_data[call.message.chat.id] = {call.data: 0}
+        elif not call.data in users_data[call.message.chat.id]:
+            users_data[call.message.chat.id][call.data] = 0
 
-        cur_img = images[users_data[call.message.chat.id]]
-        users_data[call.message.chat.id] = (users_data[call.message.chat.id] + 1)%1000
+        cur_img = images[users_data[call.message.chat.id][call.data]]
+        users_data[call.message.chat.id][call.data] = (users_data[call.message.chat.id][call.data] + 1)%1000
 
-        bot.send_photo(chat_id=call.message.chat.id, photo=open(os.path.join(dest_path, cur_img), "rb"))
+        bot.send_photo(chat_id=call.message.chat.id, photo=Image.open(os.path.join(dest_path, cur_img)))
 
     bot.polling(none_stop=True, interval=0, timeout=0)
 
