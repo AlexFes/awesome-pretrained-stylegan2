@@ -8,6 +8,7 @@ import config
 
 if len(sys.argv) == 2:
     bot = telebot.TeleBot(config.token)
+    users_data = {}
 
     def makeKeyboard():
         markup = types.InlineKeyboardMarkup()
@@ -39,8 +40,14 @@ if len(sys.argv) == 2:
     @bot.callback_query_handler(func=lambda call: True)
     def handle_query(call):
         dest_path = sys.argv[1] + '/{}'.format(call.data)
-        images = os.listdir(dest_path)
-        cur_img = random.choice(images)
+        images = sorted(os.listdir(dest_path))
+
+        if not call.message.chat.id in users_data:
+            users_data[call.message.chat.id] = 0
+
+        cur_img = images[users_data[call.message.chat.id]]
+        users_data[call.message.chat.id] = (users_data[call.message.chat.id] + 1)%1000
+
         bot.send_photo(chat_id=call.message.chat.id, photo=open(os.path.join(dest_path, cur_img), "rb"))
 
     bot.polling(none_stop=True, interval=0, timeout=0)
