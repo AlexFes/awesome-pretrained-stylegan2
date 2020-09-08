@@ -25,7 +25,7 @@ def generate_images(model_path, dest_path, seed_range):
 
     dnnlib.submit_run(sc, 'run_generator.generate_images', network_pkl=model_path, seeds=range(seed_range), truncation_psi=1.0, dest=dest_path)
 
-if (len(sys.argv) == 3)
+if len(sys.argv) == 3:
     for config_item in config.config:
         model_path = sys.argv[1] + '/{}.pkl'.format(config_item["model"])
         dest_path = sys.argv[2] + '/{}'.format(config_item["model"])
