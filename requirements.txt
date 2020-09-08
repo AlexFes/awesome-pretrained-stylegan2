@@ -4,5 +4,5 @@ Pillow
 mega.py
 gdown
 pytelegrambotapi
-tensorflow==1.15.3
+tensorflow==1.13.2
 numpy
