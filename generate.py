@@ -1,4 +1,5 @@
 import config
+import sys
 from pathlib import Path
 
 sys.path.append('stylegan2')
