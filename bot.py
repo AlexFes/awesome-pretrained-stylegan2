@@ -5,10 +5,11 @@ import sys
 from pathlib import Path
 from PIL import Image
 import random
+import time
 import config
 
 if len(sys.argv) == 2:
-    bot = telebot.TeleBot(config.token)
+    bot = telebot.TeleBot(config.token, threaded=False)
     users_data = {}
 
     def makeKeyboard():
@@ -53,7 +54,12 @@ if len(sys.argv) == 2:
 
         bot.send_photo(chat_id=call.message.chat.id, photo=Image.open(os.path.join(dest_path, cur_img)))
 
-    bot.polling(none_stop=True, interval=0, timeout=0)
-
+    # bot.polling(none_stop=True, interval=0, timeout=0)
+    while True:
+        try:
+            bot.polling(none_stop=True)
+        except Exception as e:
+            print(e)
+            time.sleep(15)
 else:
     print("Expected cmd line arg: path to imgs directory")
